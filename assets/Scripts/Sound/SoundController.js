@@ -26,6 +26,37 @@ class SoundController {
             this.audioMap[key] = AudioItem.createDefault();
         });
     }
+    getSoundMap() {
+        return this.soundMap;
+    }
+
+    playSound(audioKey, loop = false) {
+        const audioItem = this.getAudioItem(audioKey);
+        const soundType = this.getTypeByKey(audioKey);
+        if (!audioItem || !audioItem.audioClip) {
+            cc.error(`Audio item or clip not found for key: ${audioKey}`);
+            return;
+        }
+        const id = this.play(soundType, audioItem.audioClip, loop);
+        if (id == null) {
+            cc.error(`Failed to play sound for key: ${audioKey}`);
+            return;
+        }
+        if (!loop) {
+            cc.audioEngine.setFinishCallback(id, () => {
+                audioItem.setId(null);
+            });
+        }
+        audioItem.setId(id);
+    }
+
+    stopSound(audioKey) {
+        const audioItem = this.getAudioItem(audioKey);
+        if (audioItem && audioItem.getId() != null) {
+            cc.audioEngine.stop(audioItem.getId());
+            audioItem.setId(null);
+        }
+    }
 
     setDefault(type) {
         this.soundMap[type] = SoundItem.createDefault(type);
@@ -101,39 +132,11 @@ class SoundController {
         audioItem.setAudioClip(audioClip);
     }
 
-    playSound(audioKey, loop = false) {
-        const audioItem = this.getAudioItem(audioKey);
-        const soundType = this.getTypeByKey(audioKey);
-        if (!audioItem || !audioItem.audioClip) {
-            cc.error(`Audio item or clip not found for key: ${audioKey}`);
-            return;
-        }
-        const id = this.play(soundType, audioItem.audioClip, loop);
-        if (id == null) {
-            cc.error(`Failed to play sound for key: ${audioKey}`);
-            return;
-        }
-        if (!loop) {
-            cc.audioEngine.setFinishCallback(id, () => {
-                audioItem.setId(null);
-            });
-        }
-        audioItem.setId(id);
-    }
-
     stopAllSound() {
         cc.audioEngine.stopAll();
         Object.values(this.audioMap).forEach(audioItem => {
             if (audioItem) audioItem.setId(null);
         });
-    }
-
-    stopSound(audioKey) {
-        const audioItem = this.getAudioItem(audioKey);
-        if (audioItem && audioItem.getId() != null) {
-            cc.audioEngine.stop(audioItem.getId());
-            audioItem.setId(null);
-        }
     }
 
     destroy() {
