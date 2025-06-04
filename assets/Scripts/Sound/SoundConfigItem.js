@@ -1,15 +1,11 @@
-const { VolumeValidate, EnumValidate } = require("../Utils/validatesUtils");
+const { VolumeValidate, EnumValidate } = require("../Utils/ValidatesUtils");
+const { SoundConfigType: ConfigType } = require("../Enum/SoundConfigType");
 
-export const SoundType = cc.Enum({
-    MASTER: "MASTER",
-    MUSIC: "MUSIC",
-    EFFECT: "EFFECT",
-})
-class SoundConfig {
+class Config {
     static default = {
-        [SoundType.MASTER]: { volume: 1.0, enable: true },
-        [SoundType.MUSIC]: { volume: 1.0, enable: true },
-        [SoundType.Effect]: { volume: 1.0, enable: true },
+        [ConfigType.MASTER]: { volume: 1.0, enable: true },
+        [ConfigType.MUSIC]: { volume: 1.0, enable: true },
+        [ConfigType.EFFECT]: { volume: 1.0, enable: true },
     };
 
     static get(type) {
@@ -17,9 +13,9 @@ class SoundConfig {
     }
 }
 
-export class SoundItemValidator {
+export class SoundConfigValidator {
     static validateType(type) {
-        if (!EnumValidate(type, SoundType)) {
+        if (!EnumValidate(type, ConfigType)) {
             throw new Error(`Invalid sound type: ${type}`);
         }
     }
@@ -37,7 +33,7 @@ export class SoundItemValidator {
     }
 }
 
-export class SoundItem {
+export class SoundConfigItem {
     constructor(type, volume, enable) {
         this.type = type;
         this.volume = volume;
@@ -45,12 +41,12 @@ export class SoundItem {
     }
 
     setVolume(volume) {
-        SoundItemValidator.validateVolume(volume);
+        SoundConfigValidator.validateVolume(volume);
         this.volume = volume;
     }
 
     setEnable(enable) {
-        SoundItemValidator.validateEnable(enable);
+        SoundConfigValidator.validateEnable(enable);
         this.enable = enable;
     }
 
@@ -59,18 +55,18 @@ export class SoundItem {
     }
 
     static getDefaultConfig() {
-        return SoundConfig.default;
+        return Config.default;
     }
 
     static create(type, volume, enable) {
-        SoundItemValidator.validateType(type);
-        SoundItemValidator.validateVolume(volume);
-        SoundItemValidator.validateEnable(enable);
-        return new SoundItem(type, volume, enable);
+        SoundConfigValidator.validateType(type);
+        SoundConfigValidator.validateVolume(volume);
+        SoundConfigValidator.validateEnable(enable);
+        return new SoundConfigItem(type, volume, enable);
     }
 
     static createDefault(type) {
-        const config = SoundConfig.get(type);
-        return new SoundItem(type, config.volume, config.enable);
+        const config = Config.get(type);
+        return new SoundConfigItem(type, config.volume, config.enable);
     }
 }

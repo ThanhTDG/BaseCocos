@@ -1,11 +1,11 @@
 export class AudioItem {
-    constructor({ id = null, audioClip = null }) {
+    constructor({ id = null, clip = null } = {}) {
         this.id = id;
-        this.audioClip = audioClip;
+        this.clip = clip;
     }
-    setAudioClip(audioClip) {
+    setClip(clip) {
         this.id = null;
-        this.audioClip = audioClip;
+        this.clip = clip;
     }
     setId(id) {
         this.id = id;
@@ -14,7 +14,7 @@ export class AudioItem {
         return this.id;
     }
     static createDefault() {
-        return new SoundPlayItem();
+        return new AudioItem();
     }
 
 }

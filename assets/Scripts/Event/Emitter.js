@@ -5,7 +5,7 @@ class mEmitter {
         this.emitter = new EventEmitter();
         this.emitter.setMaxListeners(100);
     }
-    get instance() {
+    static get instance() {
         if (!mEmitter._instance) {
             mEmitter._instance = new mEmitter();
         }
