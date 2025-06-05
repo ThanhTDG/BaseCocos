@@ -54,32 +54,36 @@
 ### 4. Cấu trúc thư mục & mục đích
 
 ```
-Assets/
+assets/
 ├── Animations/         # Quản lý các file hoạt ảnh, dễ tái sử dụng cho nhiều đối tượng
 ├── Fonts/              # Lưu trữ font chữ, giúp đồng bộ giao diện
 ├── Prefabs/            # Chứa các mẫu đối tượng, dễ tái sử dụng và quản lý
-│   ├── Enemies/        # Gom nhóm prefab quái, dễ tìm kiếm và mở rộng
-│   ├── Players/        # Gom nhóm prefab player
-│   └── Popups/         # Gom nhóm prefab popup
+│   └── item            # (Có thể mở rộng thêm các nhóm prefab như Enemies, Players, Popups)
+├── resources/          # Thư mục đặc biệt cho load động (dynamic loading) theo chuẩn Cocos
+│   └── Sounds/         # Chứa các file âm thanh, đúng chuẩn Cocos (bắt buộc để load động, không kéo thả)
 ├── Scenes/             # Quản lý các cảnh trong game, mỗi scene là một màn chơi/giao diện
 ├── Scripts/            # Toàn bộ mã nguồn logic, chia module rõ ràng
-│   ├── Utils/          # Các hàm tiện ích dùng chung, đặt tên SomethingUtils.js để dễ nhận biết
+│   ├── GameController.js # Quản lý logic tổng thể của game
+│   ├── Enum/           # Quản lý các enum (ví dụ: EntityGroup.js, AudioKey.js, SoundConfigType.js)
+│   ├── Event/          # Định nghĩa các event key, emitter, lắng nghe sự kiện
 │   ├── Popups/         # Logic cho popup, tách biệt với prefab và UI
 │   ├── Sound/          # Xử lý logic âm thanh, quản lý phát nhạc, hiệu ứng
-│   ├── Entities/       # Các thực thể có collider, dễ quản lý va chạm và tương tác
-│   │   ├── EntityGroup.js   # Định nghĩa group collider, giúp kiểm soát va chạm
-│   │   ├── Enemies/         # Logic cho quái, tách biệt từng loại
-│   │   └── Player/          # Logic cho player
-│   ├── Scenes/         # Script điều khiển scene, ví dụ: loading, chuyển cảnh
-│   ├── Event/          # Quản lý emitter và key sự kiện, giúp code tách rời, dễ mở rộng
-│   └── ...             # Các module khác (ví dụ: Network, SaveData, ...)
-├── Sounds/             # Chứa nhiều file âm thanh, dễ quản lý và phân loại
+│   ├── Utils/          # Các hàm tiện ích dùng chung, đặt tên SomethingUtils.js để dễ nhận biết
+│   └── ...             # Các module khác (ví dụ: scene, ...)
 ├── Spines/             # Lưu trữ file spine cho hoạt ảnh xương, tối ưu hóa animation
 ├── Sprites/            # Ảnh sprite, chia theo scene hoặc component để dễ tìm kiếm
 │   ├── Lobby/          # Sprite cho scene lobby
 │   ├── Battle/         # Sprite cho scene battle
-│   └── Component/      # Sprite cho các component đặc biệt (ví dụ: popup)
+│   └── ...             # Sprite cho các component đặc biệt (ví dụ các popup)
 ```
+
+**Lưu ý:**
+
+- Thư mục gốc là `assets/` (không phải `Assets/`).
+- Thư mục âm thanh phải nằm trong `assets/resources/Sounds/` để Cocos hỗ trợ load động (dynamic loading).
+- File `GameController.js` nằm trực tiếp trong `assets/Scripts/` để quản lý logic tổng thể của game.
+- Các thư mục con như Prefabs, Sprites, Spines, Fonts... đều nằm trong `assets/`.
+- Có thể mở rộng thêm các nhóm prefab, sprite hoặc tạo thêm các thư mục module khác (ví dụ: Network, SaveData, ...) trong `Scripts/` theo nhu cầu thực tế dự án.
 
 ---
 
